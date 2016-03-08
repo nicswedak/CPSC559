@@ -39,10 +39,7 @@ public class SQLQueries {
 	        statement = myConnection.createStatement();
 	        ResultSet results = statement.executeQuery(query);
 	        while(results.next()) {
-	        	//String fname = results.getString("fname");
-	        	//String lname = results.getString("lname");
 	        	int rating = results.getInt("rating");
-	        	//String school = results.getString("school");
 	        	String classname = results.getString("classname");
 	        	int classnumber = results.getInt("classnumber");
 	        	String comments = results.getString("comments");
@@ -57,7 +54,7 @@ public class SQLQueries {
 	    }
 	}
 	
-public void addProf(Connection myConnection, String myDataBase, String fName, String lName, String school) throws SQLException {
+	public void addProf(Connection myConnection, String myDataBase, String fName, String lName, String school) throws SQLException {
 		
 		Statement statement = null;
 		
@@ -77,44 +74,44 @@ public void addProf(Connection myConnection, String myDataBase, String fName, St
 	    }
 	}
 
-public void removeProf(Connection myConnection, String myDataBase, String oldFName, String oldLName) throws SQLException {
+	public void removeProf(Connection myConnection, String myDataBase, String oldFName, String oldLName) throws SQLException {
 	
-	Statement statement = null;
-	
-	try {
+		Statement statement = null;
 		
-		String query = "delete from " + myDataBase + ".profs where fname = '" 
-		+ oldFName + "' and lname = '" + oldLName + "'"; 
-		statement = myConnection.createStatement();
-		statement.executeUpdate(query);
-		
-	} catch (SQLException e) {
-        System.out.println(e);
-    } finally {
-        if (statement != null) { 
-        	statement.close(); 
-        }
-    }
-}
+		try {
+			
+			String query = "delete from " + myDataBase + ".profs where fname = '" 
+			+ oldFName + "' and lname = '" + oldLName + "'"; 
+			statement = myConnection.createStatement();
+			statement.executeUpdate(query);
+			
+		} catch (SQLException e) {
+	        System.out.println(e);
+	    } finally {
+	        if (statement != null) { 
+	        	statement.close(); 
+	        }
+	    }
+	}
 
-public void addRating(Connection myConnection, String myDataBase, String fName, String lName, 
-		int rating, String className, int classNumber, String comments) throws SQLException {
-	
-	Statement statement = null;
-	
-	try {
+	public void addRating(Connection myConnection, String myDataBase, String fName, String lName, 
+			int rating, String className, int classNumber, String comments) throws SQLException {
 		
-		String query = "insert into " + myDataBase + ".ratings (fname, lname, rating, classname, classnumber, comments) " + 
-				"values ('" + fName + "', '" + lName + "', '" + rating + "', '" + className + "', '" + classNumber + "', '" + comments + "')";
-		statement = myConnection.createStatement();
-		statement.executeUpdate(query);
+		Statement statement = null;
 		
-	} catch (SQLException e) {
-        System.out.println(e);
-    } finally {
-        if (statement != null) { 
-        	statement.close(); 
-        }
-    }
-}
+		try {
+			
+			String query = "insert into " + myDataBase + ".ratings (fname, lname, rating, classname, classnumber, comments) " + 
+					"values ('" + fName + "', '" + lName + "', '" + rating + "', '" + className + "', '" + classNumber + "', '" + comments + "')";
+			statement = myConnection.createStatement();
+			statement.executeUpdate(query);
+			
+		} catch (SQLException e) {
+	        System.out.println(e);
+	    } finally {
+	        if (statement != null) { 
+	        	statement.close(); 
+	        }
+	    }
+	}
 }

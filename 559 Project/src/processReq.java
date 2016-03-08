@@ -9,10 +9,12 @@ This class is used to process incoming client requests.
 Its used by Server.java to minimize to possibility of
 clients getting rejected as they attempt to connect to the server.
  */
+
+
 public class processReq implements Runnable{
 
-	//
     protected Socket clientSocket = null;
+    
     //Name of the server
     protected String serverText   = null;
 
@@ -20,6 +22,7 @@ public class processReq implements Runnable{
         this.clientSocket = clientSocket;
         this.serverText   = serverText;
     }
+
 
     public void run() {
         try {
@@ -35,6 +38,7 @@ public class processReq implements Runnable{
             input.close();
             //Server side, displaying that the request has finshed and what date/time
             System.out.println("Request processed: " + date);
+            System.out.println("FROM: " + clientSocket.getRemoteSocketAddress().toString());
         } catch (IOException e) {
             e.printStackTrace();
         }

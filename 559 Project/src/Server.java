@@ -4,7 +4,7 @@ import java.net.Socket;
 import java.io.IOException;
 
 public class Server implements Runnable{
-    protected int          serverPort   = 8080;
+    protected int          serverPort   = 9000;
     protected ServerSocket serverSocket = null;
     protected boolean      isStopped    = false;
     protected Thread       runningThread= null;
@@ -14,14 +14,18 @@ public class Server implements Runnable{
     public Server(int port){
         this.serverPort = port;
     }
-
-//Function that runs the server and error handling
+    
+    public int threadCount;
+    
+    //Function that runs the server and error handling
     public void run(){
         synchronized(this){
             this.runningThread = Thread.currentThread();
         }
+        
         //Attempting to open the port
         openSocket();
+        
         //Continue to do things until the server is stopped
         while(! isStopped()){
             Socket clientSocket = null;
@@ -32,13 +36,16 @@ public class Server implements Runnable{
                     System.out.println("Server has been disconnected.") ;
                     return;
                 }
-                throw new RuntimeException(
-                    "Issues connecting to the server", e);
+                throw new RuntimeException("Issues connecting to the server", e);
             }
             new Thread(
-                new processReq(
-                    clientSocket, "OUR TEST SERVER")
+                new processReq(clientSocket, "OUR TEST SERVER")
+
             ).start();
+            
+            //Gets the thread count for a specific server socket
+            threadCount = java.lang.Thread.activeCount();
+            System.out.println(threadCount);
         }
         System.out.println("Server Stopped.") ;
     }
@@ -58,7 +65,6 @@ public class Server implements Runnable{
     }
     
     //Attempting to open the port
-    //This is declared at the top of the program
     private void openSocket() {
         try {
             this.serverSocket = new ServerSocket(this.serverPort);
@@ -66,5 +72,4 @@ public class Server implements Runnable{
             throw new RuntimeException("Cannot open port: " + serverPort, e);
         }
     }
-
 }

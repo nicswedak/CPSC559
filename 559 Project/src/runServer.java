@@ -9,7 +9,7 @@
 public class runServer{
 	public static void main(String[] args){
 		//Creating a server and indicating what the local host will be when the server runs
-		Server server = new Server(8080);
+		Server server = new Server(9000);
 	
 		//Starting the server
 		new Thread(server).start();
@@ -22,6 +22,6 @@ public class runServer{
 		System.out.println("Turning the server off \n");
 		//AFter the time has run out the server turns off
 		server.stop();
-return;
+		return;
 	}
 }
