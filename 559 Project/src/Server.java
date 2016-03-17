@@ -38,14 +38,12 @@ public class Server implements Runnable{
                 }
                 throw new RuntimeException("Issues connecting to the server", e);
             }
-            new Thread(
-                new processReq(clientSocket, "OUR TEST SERVER")
-
-            ).start();
+            new Thread(new processReq(clientSocket, "OUR TEST SERVER")).start();
             
             //Gets the thread count for a specific server socket
             threadCount = java.lang.Thread.activeCount();
             System.out.println(threadCount);
+            
         }
         System.out.println("Server Stopped.") ;
     }

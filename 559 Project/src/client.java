@@ -3,20 +3,65 @@ import java.net.*;
 import java.io.InputStreamReader;
 import java.sql.SQLException;
 import java.util.Scanner;
+import java.net.Socket;
+
 
 public class client {
+	
+	private static Socket socket;	
+	
+	public static boolean pingHost(String host, int port, int timeout) {	    		
+		try (Socket socket = new Socket()) {
+	        socket.connect(new InetSocketAddress(host, port), timeout);
+	        return true;
+	    } catch (IOException e) {
+	        return false; // Either timeout or unreachable or failed DNS lookup.
+	    }
+	}
+	
     public static void main(String[] args) throws IOException {
 
-        String serverHostname = new String ("localhost");
+        String serverHostname = new String ("192.168.0.150");
 
         System.out.println ("Attemping to connect to host " + serverHostname + " on port 9000.");
         
-        int port = 9000;
+        int port = 8080;
+        int portBackup = 8090;
         Socket echoSocket = null;
         PrintWriter out = null;
         BufferedReader in = null;
-
+        
         try {
+        	//Fault Tolerance
+        	//If primary proxy fails, switch to the backup
+        	if(!pingHost(serverHostname,port,1000)){
+        		port = portBackup;
+        	}
+
+        	socket = new Socket(serverHostname, port);
+        	
+            OutputStream os = socket.getOutputStream();
+            OutputStreamWriter osw = new OutputStreamWriter(os);
+            BufferedWriter bw = new BufferedWriter(osw);
+            Scanner userInput = new Scanner(System.in);
+            
+            System.out.println("Whatchu want");
+            String str = userInput.nextLine();
+
+            String sendMessage = str + "\n";
+            bw.write(sendMessage);
+            bw.flush();
+            System.out.println("Message sent to the server : "+sendMessage);
+        	
+            
+            //Get the return message from the server            
+            InputStream is = socket.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader br = new BufferedReader(isr);
+            String message = br.readLine();
+            System.out.println("Message received from the server : " +message);
+            
+                    
         	InetAddress address = InetAddress.getByName(serverHostname);
             echoSocket = new Socket(address, port);
             out = new PrintWriter(echoSocket.getOutputStream(), true);
@@ -29,13 +74,16 @@ public class client {
             System.exit(1);
         }
 
-	BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 
-			Scanner userInput = new Scanner(System.in);
+        BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+
+	
+/*
+ * 
+ * 			
 			DBConnect connection = new DBConnect();
-			SQLQueries queries = new SQLQueries();
+	   		SQLQueries queries = new SQLQueries();
 			boolean loggedOut = false;
-			
 			do  {
 				
 				System.out.println("What would you like to do?");
@@ -49,12 +97,12 @@ public class client {
 				String input = userInput.nextLine();
 				if(input.equals("1")){
 				
-				/*	try {
+					try {
 						queries.viewUsers(connection.SQLConnection(), "ratemyprof");
 					} catch (SQLException e) {
 						e.printStackTrace();
 					}
-	*/
+/
 					System.out.println("WORKED");
 				} else if (input.equals("2")) {
 				
@@ -106,7 +154,7 @@ public class client {
 						String oldLName = userInput.nextLine();
 						System.out.println("Enter any comments you have for the professor");
 						String comments = userInput.nextLine();
-						System.out.println("Enter the 4 digit class name for the class the professor taught");
+						System.out.println("Enter the 4 letter class abbrevation for the class the professor taught");
 						String className = userInput.nextLine();
 						System.out.println("Enter the class number for the class the professors taught");
 						int classNumber = userInput.nextInt();
@@ -124,6 +172,8 @@ public class client {
 					loggedOut = true;
 				}
 			} while(!loggedOut);
+
+*/
 
 	out.close();
 	in.close();

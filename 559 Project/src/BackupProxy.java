@@ -2,25 +2,25 @@ import java.io.*;
 import java.net.*;
 import java.util.*;
 
-public class Proxy {
+public class BackupProxy {
     public static void main(String[] args) {
         try {
-            Ping myping = new Ping();
+            
             String host = "192.168.0.150";
             int remoteport;
             int remoteport1 = 9090;
             int remoteport2 = 9000;
             
             //This is the entrance
-            int localport = 8080;
+            int localport = 8090;
             
             
             //Print a starting message
    
             
             while (true) {
-            	myping.runIt();
-                System.out.println("Server '1' or Server '2' ");
+            	
+                System.out.println("Server '1' on proxy2 or Server '2' on proxy 2 ");
                 Scanner in = new Scanner(System.in);
 
                 int num = in.nextInt();
@@ -43,11 +43,11 @@ public class Proxy {
 }
 
 // Handles a socket connection to the proxy server from the client and uses 2 threads to proxy between server and client
-class ThreadProxy extends Thread {
+class BackupThreadProxy extends Thread {
     private Socket sClient;
     private final String SERVER_IP;
     private final int SERVER_PORT;
-    ThreadProxy(Socket sClient, String ServerUrl, int ServerPort) {
+    BackupThreadProxy(Socket sClient, String ServerUrl, int ServerPort) {
         this.SERVER_IP = ServerUrl;
         this.SERVER_PORT = ServerPort;
         this.sClient = sClient;

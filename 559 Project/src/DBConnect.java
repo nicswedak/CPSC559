@@ -10,7 +10,7 @@ public class DBConnect {
 		try {
 			String host = "jdbc:mysql://localhost:3306/ratemyprof";
 			String username = "root";
-			String password = "nic12345";
+			String password = "12345678";
 			
 			Class.forName("com.mysql.jdbc.Driver");
 			
@@ -26,4 +26,3 @@ public class DBConnect {
 		return con;
 	}
 }
-
