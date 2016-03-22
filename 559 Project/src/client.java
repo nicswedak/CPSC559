@@ -23,7 +23,7 @@ public class client {
 
         String serverHostname = new String ("192.168.0.150");
 
-        System.out.println ("Attemping to connect to host " + serverHostname + " on port 9000.");
+        System.out.println ("Attemping to connect to host " + serverHostname + " on port 8080.");
         
         int port = 8080;
         int portBackup = 8090;
@@ -36,8 +36,10 @@ public class client {
         	//If primary proxy fails, switch to the backup
         	if(!pingHost(serverHostname,port,1000)){
         		port = portBackup;
+        		 System.out.println ("Connection to 8080 failed.");
+        		 System.out.println ("Attemping to connect to host " + serverHostname + " on port 8090.");
         	}
-
+      
         	socket = new Socket(serverHostname, port);
         	
             OutputStream os = socket.getOutputStream();
@@ -66,6 +68,7 @@ public class client {
             echoSocket = new Socket(address, port);
             out = new PrintWriter(echoSocket.getOutputStream(), true);
             in = new BufferedReader(new InputStreamReader(echoSocket.getInputStream()));
+        	
         } catch (UnknownHostException e) {
             System.err.println("Don't know about host: " + serverHostname);
             System.exit(1);
@@ -76,7 +79,7 @@ public class client {
 
 
         BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-
+        
 	
 /*
  * 

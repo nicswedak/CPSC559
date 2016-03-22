@@ -12,7 +12,7 @@ public class Ping{
 		com.add("-4");
 		com.add("-n");
 		com.add("1");
-		com.add("192.168.0.14");
+		com.add("192.168.0.150");
 		
 		String i = null;
 		String Error = "";
@@ -29,3 +29,4 @@ public class Ping{
 	}
 	
 }
+

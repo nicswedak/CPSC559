@@ -32,8 +32,8 @@ public class processReq implements Runnable{
 
     public void run() {
         try {
+            //System.out.println("IT HIT RUN") ;
         	//Gather a input and output streams
-            InputStream input  = clientSocket.getInputStream();
             OutputStream output = clientSocket.getOutputStream();
             long time = System.currentTimeMillis();
             Date date=new Date(time);
@@ -44,14 +44,14 @@ public class processReq implements Runnable{
                     InputStream is = clientSocket.getInputStream();
                     InputStreamReader isr = new InputStreamReader(is);
                     BufferedReader br = new BufferedReader(isr);
-                    String number = br.readLine();
-                    if(number != null){          
-                    System.out.println("Message received from client is "+number);
+                    String clientIn = br.readLine();
+                    if(clientIn != null){          
+                    System.out.println("Message received from client is "+ clientIn);
      
                     //Multiplying the number by 2 and forming the return message
                     String returnMessage;     
                         //Input was not a number. Sending proper message back to client.
-                        returnMessage = "IT WORKS\n";
+                        returnMessage = "Worked on port 9000\n";
                  
 
                     	//Sending the response back to the client.
@@ -68,7 +68,7 @@ public class processReq implements Runnable{
             output.write(("Processing Request: " + this.serverText + " On:" + date).getBytes());
             //Closing both input and output streams           
             output.close();
-            input.close();
+            is.close();
             //Server side, displaying that the request has finshed and what date/time
             System.out.println("Request processed: " + date);
             System.out.println("FROM: " + clientSocket.getRemoteSocketAddress().toString());

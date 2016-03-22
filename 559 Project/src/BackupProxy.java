@@ -3,38 +3,62 @@ import java.net.*;
 import java.util.*;
 
 public class BackupProxy {
-    public static void main(String[] args) {
+    public static void main(String args[]) {
         try {
-            
+        	
+        	Ping myping = new Ping();
             String host = "192.168.0.150";
-            int remoteport;
+            int remoteport = 9000;
             int remoteport1 = 9090;
             int remoteport2 = 9000;
-            
+            int count = 2;
+            int idCount = -1;
             //This is the entrance
             int localport = 8090;
             
             
             //Print a starting message
-   
-            
-            while (true) {
-            	
-                System.out.println("Server '1' on proxy2 or Server '2' on proxy 2 ");
-                Scanner in = new Scanner(System.in);
+           
+            	myping.runIt();
+            	   ServerSocket server = new ServerSocket(localport);
+                
+                while (true) {
+                  	
+                	
+                    System.out.println("Count is: " + count);
+                    if(count % 2 == 0){              
+                    System.out.println("Server '1' (9090) or Server '2' (9000) - DONE ON BACKUP PROXY ");
+                    Scanner in = new Scanner(System.in);
+                     
+                    int num = in.nextInt();
+                    if(num == 1){
+                    	try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log.txt", true)))) {
+                    	    out.println("1."+idCount);
 
-                int num = in.nextInt();
-                if(num == 1){
-                    remoteport = remoteport1;
-                   }
-                   else{
-                   	remoteport = remoteport2;
-                   }
-                System.out.println("Starting proxy for " + host + ":" + remoteport + " on port " + localport);
-                ServerSocket server = new ServerSocket(localport);
-                new ThreadProxy(server.accept(), host, remoteport);
-                server.close();
+                    	}
+                        remoteport = remoteport1;
+                        System.out.println("Starting proxy for " + host + ":" + remoteport + " on port " + localport);
+                        idCount++;
+                       }
+                       else{
+                    	   	try(PrintWriter out = new PrintWriter(new BufferedWriter(new FileWriter("log.txt", true)))) {
+                        	    out.println("1."+idCount);
+
+                        	}
+                       	remoteport = remoteport2;
+                        System.out.println("Starting proxy for " + host + ":" + remoteport + " on port " + localport);
+                        idCount++;
+                       }
+                    server.close();
+                    server = new ServerSocket(localport);
+                    }
+                    
+
+                new BackupThreadProxy(server.accept(), host, remoteport);
+                count++;
+            
             }
+                
         } catch (Exception e) {
             System.err.println(e);
             System.err.println("Usage: java ProxyMultiThread " + "<host> <remoteport> <localport>");
@@ -65,6 +89,8 @@ class BackupThreadProxy extends Thread {
             Socket client = null;
             Socket server = null;
             
+            
+            
             //Connects a socket to the server
             try {
                 server = new Socket(SERVER_IP, SERVER_PORT);
@@ -78,18 +104,29 @@ class BackupThreadProxy extends Thread {
             final InputStream inputFromServer = server.getInputStream();
             final OutputStream outputToServer = server.getOutputStream();
             
+            final FileOutputStream toLog = new FileOutputStream("log.txt", true);
+            
+  
             //A new thread for uploading to the server
             new Thread() {
                 public void run() {
                     int readInBytes;
                     try {
+                    	//Loop to send all incoming information from a client to a designated server
                         while ((readInBytes = inputFromClient.read(clientRequest)) != -1) {
+                        	                        	
+                        	//Writing user transmission to a log file
+                        	   toLog.write(clientRequest,0,readInBytes);
+                
+                        
+                        	   toLog.flush();
+                        	   
                             outputToServer.write(clientRequest, 0, readInBytes);
                             outputToServer.flush();
-
-                            //Logic to send queries to the server
                             
                         }
+                        toLog.close();
+                        
                     } catch (IOException e) {
                     	
                     } 
@@ -115,15 +152,19 @@ class BackupThreadProxy extends Thread {
                 }
                 
             } catch (IOException e) {
-                e.printStackTrace();
+               // e.printStackTrace();
                 
             } finally {
                 try {
-                    if (server != null)
+                    if (server != null){
+                    	//System.err.println("Error 1");          
                         server.close();
-                    if (client != null)
+                }
+                    if (client != null){
+                    //System.err.println("Error 2");                  
                         client.close();
-                } catch (IOException e) {
+                }
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }

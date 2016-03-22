@@ -13,6 +13,7 @@ public class runServer{
 	
 		//Starting the server
 		new Thread(server).start();
+        System.out.println("Server Started and listening to the port 9000 \n");
 		try {
 			//Length of time the server is active
 			Thread.sleep(100 * 5000);
