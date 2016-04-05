@@ -1,0 +1,14 @@
+SET;lol;lol;lol;lol;2132;2
+|1.2
+
+SET;hey;hey;hey;hey;213;2
+|1.3
+
+DEL;lol;lol
+|1.4
+
+DEL;lol;lol
+DEL;lol;lol
+DEL;lol;lol
+|1.0
+
