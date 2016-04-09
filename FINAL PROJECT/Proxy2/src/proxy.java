@@ -46,7 +46,7 @@ public class proxy {
 			 * Also create variables for various ports that the servers are located on
 			 */
 			Ping myping = new Ping();
-			String host = "192.168.0.150";
+			String host = "192.168.0.18";
 			int remoteport = 9000;
 			int remoteport1 = 9090;
 			int remoteport2 = 9000;
@@ -166,6 +166,7 @@ class logFile extends Thread {
 			/*
 			 * Creating a Primary socket to send a request to a server
 			 */
+	
 			try {
 				server = new Socket(SERVER_IP, SERVER_PORT);
 			} catch (IOException e) {
@@ -190,7 +191,9 @@ class logFile extends Thread {
 						 * Ensuring the log file on the main proxy and back up proxy are the same
 						 */
 						while ((readInBytes = inputFromClient.read(clientRequest)) != -1) {
-
+							if(!proxy.check()){
+								break;
+							}
 							toLog.write(clientRequest,0,readInBytes);                      
 							toLog.flush();
 

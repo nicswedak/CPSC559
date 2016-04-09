@@ -19,7 +19,7 @@ public class proxymain {
 			 * Also create variables for various ports that the servers are located on
 			 */
 			Ping myping = new Ping();
-			String host = "192.168.0.150";
+			String host = "192.168.0.18";
 			int remoteport = 9000;
 			int remoteport1 = 9090;
 			int remoteport2 = 9000;
